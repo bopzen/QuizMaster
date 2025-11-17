@@ -1,0 +1,63 @@
+﻿@model IEnumerable<QuizMaster.ViewModels.QuizLeaderBoardViewModel>
+
+@{
+    ViewData["Title"] = "Leaderboard";
+}
+
+<h1>Leaderboard</h1>
+
+<table class="table leaderboard-table shadow mt-4">
+    <thead class="table-header">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(Model => Model.Rank)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Points)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CorrectAnswers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateAchieved)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        var rowClass = item.Rank switch
+        {
+            1 => "first-place fw-bold",
+            2 => "second-place fw-bold",
+            3 => "third-place fw-bold",
+            _ => ""
+        };
+        <tr class="@rowClass">
+            <td>
+                @Html.DisplayFor(modelItem => item.Rank)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td class="fw-bold">
+                @Html.DisplayFor(modelItem => item.Points)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CorrectAnswers)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateAchieved)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

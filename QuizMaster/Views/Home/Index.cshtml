@@ -1,0 +1,73 @@
+﻿@using QuizMaster.Enums
+@using QuizMaster.Helpers
+@model QuizMaster.ViewModels.QuizSettingsViewModel
+
+@{
+    ViewData["Title"] = "Quiz Master Select Quiz";
+    var difficulties = new[] { "Easy", "Medium", "Hard" };
+    var types = new[] { "Multiple", "Boolean" };
+}
+
+<h1>Quiz Master</h1>
+
+<h4>Select your quiz type</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Index">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mt-2">
+                <label asp-for="NumberOfQuestions" class="control-label fw-bold ms-2 mb-1"></label>
+                <input asp-for="NumberOfQuestions" class="form-control shadow rounded-pill" />
+                <span asp-validation-for="NumberOfQuestions" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-2">
+                <label asp-for="Category" class="control-label fw-bold ms-2 mb-1"></label>
+                <select asp-for="Category" class="form-select shadow rounded-pill">
+                    <option value="">Any Category</option>
+                    @foreach (var category in Enum.GetValues(typeof(EnCategory)).Cast<EnCategory>())
+                    {
+                        <option value="@((int)category)">
+                            @category.GetDescription()
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-2">
+                <label asp-for="Difficulty" class="control-label fw-bold ms-2 mb-1"></label>
+                <select asp-for="Difficulty" class="form-select shadow rounded-pill">
+                    <option value="">Any Difficulty</option>
+                    @foreach (var difficulty in difficulties)
+                    {
+                        <option value="@difficulty">@difficulty</option>
+                    }
+                </select>
+                <span asp-validation-for="Difficulty" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-2">
+                <label asp-for="Type" class="control-label fw-bold ms-2 mb-1"></label>
+                <select asp-for="Type" class="form-select shadow rounded-pill">
+                    <option value="">Any Type</option>
+                    @foreach (var type in types)
+                    {
+                        <option value="@type">@type</option>
+                    }
+                </select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-2">
+                <label asp-for="Name" class="control-label fw-bold ms-2 mb-1"></label>
+                <input asp-for="Name" class="form-control shadow rounded-pill" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-4 mb-3">
+                <input type="submit" value="Start Quiz" class="start-quiz-btn btn shadow rounded-pill fw-bold" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

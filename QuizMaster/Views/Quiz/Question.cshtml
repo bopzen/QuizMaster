@@ -1,0 +1,85 @@
+﻿@model QuizMaster.ViewModels.QuestionViewModel
+
+<div class="d-flex flex-row justify-content-between align-items-top">
+    <div>
+        <h3 class="mb-2">Question @Model.CurrentIndex of @Model.TotalQuestions</h3>
+        <h5 class="fw-normal" mb-2">Category: @Model.Category</h5>
+        <h5 class="fw-normal mb-1">Level: @Model.Difficulty</h5>
+
+    </div>
+    <div class="text-center mb-3 pb-2">
+        <img src="~/media/images/clock.png" class="clock" alt="Clock" /><span id="timer"></span>
+    </div>
+</div>
+<hr />
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    @for (int i = 1; i <= Model.TotalQuestions; i++)
+    {
+        var isCompleted = i < Model.CurrentIndex;
+        var isCurrent = i == Model.CurrentIndex;
+        <div class="flex-fill mx-1">
+            @if (isCompleted)
+            {
+                <div class="text-center py-1 rounded fw-bold bg-secondary border border-secondary text-white shadow">@i</div>
+            }
+            else if (isCurrent)
+            {
+                <div class="text-center py-2 rounded fw-bold bg-current border border-success text-white shadow">@i</div>
+            }
+            else
+            {
+                <div class="text-center py-1 rounded fw-bold border border-secondary text-secondary bg-white shadow">@i</div>
+            }
+        </div>
+    }
+</div>
+
+
+<form method="post" asp-action="Question">
+    <p class="fw-bold">@Model.Question</p>
+    <div class="mb-4">
+        @foreach (var option in Model.Options)
+        {
+            <label class="answer-label border rounded-pill shadow w-50 mb-3 px-3 p-2 bg-white">
+                <input class="answer me-2" type="radio" name="SelectedAnswer" value="@option" required /> @option
+            </label>
+        }
+    </div>
+
+
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="CurrentIndex" value="@Model.CurrentIndex" />
+
+    <button type="submit" class="next-btn shadow rounded-pill btn mt-3 w-25 fw-bold">Next</button>
+</form>
+
+<a asp-controller="Home" asp-action="Index" class="shadow rounded-pill btn start-quiz-btn mt-3 w-25 fw-bold">Start New Quiz</a>
+
+@section Scripts {
+    <script>
+        let seconds = @Model.RemainingSeconds;
+        const timer = document.getElementById("timer");
+
+        function updateTimer() {
+            if (seconds <= 0) {
+                window.location.href = '@Url.Action("Result")';
+                return;
+            }
+
+            if (seconds <= 30) {
+            timer.style.color = "red";
+            } else {
+                timer.style.color = "";
+            }
+
+            const min = Math.floor(seconds / 60);
+            const sec = seconds % 60;
+            timer.textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+            seconds--;
+        }
+
+        updateTimer();
+        setInterval(updateTimer, 1000);
+    </script>
+}
